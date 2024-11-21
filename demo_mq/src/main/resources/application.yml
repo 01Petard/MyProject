@@ -1,0 +1,44 @@
+server:
+  port: 18080
+
+spring:
+  redis:
+    database: 0
+    host: 1.94.147.176
+    port: 6379
+    password: kjiolluy711
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+    timeout: 1200ms
+
+  rabbitmq:
+    host: 1.94.147.176
+    port: 5672
+    username: rabbitmq
+    password: rabbitmq
+    virtual-host: /
+
+#  kafka:
+#    bootstrap-servers: 1.94.147.176:9092 # Kafka服务器地址，可以是多个，用逗号隔开
+#    consumer:
+#      group-id: my-group # 消费者组ID
+#      auto-offset-reset: earliest # 当没有初始偏移量或当前偏移量不再可用时，从最早的记录开始读取
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer # 消息键的反序列化器
+#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer # 消息值的反序列化器
+#      enable-auto-commit: false # 是否自动提交消费的偏移量，默认为true
+#    producer:
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer # 生产者发送消息键的序列化器
+#      value-serializer: org.apache.kafka.common.serialization.StringSerializer # 生产者发送消息值的序列化器
+#    listener:
+#      ack-mode: manual # 手动确认模式，其他可选值有batch, record等
+#    properties:
+#      spring.json.trusted.packages: '*' # 允许JSON反序列化信任所有包，仅当使用JSON序列化/反序列化时需要
+logging:
+  level:
+    root: info
+    org.springframework: info
+    com.example: debug

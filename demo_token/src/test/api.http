@@ -1,0 +1,36 @@
+### 测试Redis
+GET http://localhost:5050/test-redis
+
+<> 2024-11-21T153549.200.txt
+
+
+### 测试用户名密码登陆
+
+@username = admin
+@password = 123
+
+POST http://localhost:5050/api/login?
+    username={{username}}&password={{password}}&
+    Accept: application/json
+    Content-Type: application/x-www-form-urlencoded
+
+
+<> 2024-11-21T155439.200.txt
+<> 2024-11-21T155435.200.txt
+
+
+###
+GET http://localhost:5050/api/profile
+Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTczMjIxMTY3OSwidXNlcklkIjo2NjYsInVzZXJuYW1lIjoiYWRtaW4ifQ.b__rarnfjy1p38z-FLq3r-CCM1PflOX9VBLbA_kZ3b8
+
+<> 2024-11-21T160026.200.txt
+
+###
+#DELETE http://localhost:5050/api/logout?
+#    userId={{$random.integer(100)}}
+
+@userId = 666
+DELETE http://localhost:5050/api/logout?
+    userId={{userId}}
+
+<> 2024-11-21T160317.200.json
