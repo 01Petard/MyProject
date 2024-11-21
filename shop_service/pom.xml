@@ -8,24 +8,25 @@
         <version>1.0</version>
     </parent>
 
-    <artifactId>demo_token</artifactId>
-    <name>demo_token</name>
-    <description>Demo for token authentication</description>
+    <artifactId>shop_service</artifactId>
+    <name>shop_service</name>
+    <description>service of shop</description>
 
     <dependencies>
 
-        <!-- jwt -->
+        <!-- 引入common模块 -->
         <dependency>
-            <groupId>com.auth0</groupId>
-            <artifactId>java-jwt</artifactId>
-            <version>3.2.0</version>
+            <groupId>com.hzx</groupId>
+            <artifactId>common_utils</artifactId>
+            <version>1.0</version>
         </dependency>
 
+        <!-- 引入model模块 -->
         <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>0.9.1</version>
+            <groupId>com.hzx</groupId>
+            <artifactId>shop_model</artifactId>
+            <version>1.0</version>
         </dependency>
-
     </dependencies>
+
 </project>

@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.hzx</groupId>
         <artifactId>MyProject</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0</version>
     </parent>
 
     <artifactId>demo_mq</artifactId>

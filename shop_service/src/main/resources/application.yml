@@ -1,0 +1,87 @@
+server:
+  port: 8008
+
+spring:
+  mvc.path match.matching-strategy: ANT_PATH_MATCHER
+  profiles:
+    active: dev  # prod / dev
+  main:
+    allow-circular-references: true
+  datasource:
+    druid:
+      driver-class-name: ${hzx.datasource.driver-class-name}
+      url: jdbc:mysql://${hzx.datasource.host}:${hzx.datasource.port}/${hzx.datasource.database}?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
+#      url: jdbc:mysql://${hzx.datasource.host}:${hzx.datasource.port}/${hzx.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      username: ${hzx.datasource.username}
+      password: ${hzx.datasource.password}
+  redis:
+    host: ${hzx.redis.host}
+    port: ${hzx.redis.port}
+#    password: ${hzx.redis.password}
+    database: ${hzx.redis.database}
+
+
+mybatis:
+  #mapper配置文件
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.hzx.entity
+  configuration:
+    #开启驼峰命名
+    map-underscore-to-camel-case: true
+
+
+# 设置Mapper接口所对应的XML文件位置，如果你在Mapper接口中有自定义方法，需要进行该配置
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml
+  # 设置别名包扫描路径，通过该属性可以给包中的类注册别名
+  type-aliases-package: com.heima.model
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql日志
+    map-underscore-to-camel-case: true  # 该配置就是将带有下划线的表字段映射为驼峰格式的实体类属性
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: deleted  # 全局逻辑删除的实体字段名
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+
+logging:
+  level:
+    com:
+      hzx:
+        mapper: debug
+        service: info
+        controller: info
+
+hzx:
+  jwt:
+    admin-secret-key: hzx_admin  # 设置jwt签名加密时使用的秘钥
+    admin-ttl: 7200000           # 设置jwt过期时间
+    admin-token-name: token      # 设置前端传递过来的令牌名称
+    user-secret-key: hzx_user
+    user-ttl: 7200000
+    user-token-name: authentication
+  alioss:
+    access-key-id: ${hzx.alioss.access-key-id}
+    access-key-secret: ${hzx.alioss.access-key-secret}
+    endpoint: ${hzx.alioss.endpoint}
+    bucket-name: ${hzx.alioss.bucket-name}
+  alisms:
+    access-key-id: ${hzx.alisms.access-key-id}
+    access-key-secret: ${hzx.alisms.access-key-secret}
+    region: ${hzx.alisms.region}
+    endpoint: ${hzx.alisms.endpoint}
+    signName: ${hzx.alisms.signName}
+    templateCode: ${hzx.alisms.templateCode}
+  wechat:
+    appid: ${hzx.wechat.appid}
+    secret: ${hzx.wechat.secret}
+    mchid: ${hzx.wechat.mchid}
+    mch-serial-no: ${hzx.wechat.mch-serial-no}
+    private-key-file-path: ${hzx.wechat.private-key-file-path}
+    api-v3-key: ${hzx.wechat.api-v3-key}
+    we-chat-pay-cert-file-path: ${hzx.wechat.we-chat-pay-cert-file-path}
+    notify-url: ${hzx.wechat.notify-url}
+    refund-notify-url: ${hzx.wechat.refund-notify-url}
+
+

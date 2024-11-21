@@ -8,11 +8,28 @@
         <version>1.0</version>
     </parent>
 
-    <artifactId>demo_token</artifactId>
-    <name>demo_token</name>
-    <description>Demo for token authentication</description>
+    <artifactId>common_utils</artifactId>
+    <name>common_utils</name>
+    <description>common utils for projects</description>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <!-- AspectJ编译时织入（如果需要） -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.9.7</version>
+        </dependency>
+        <!-- AspectJ编译器（如果做编译时织入） -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjtools</artifactId>
+            <version>1.9.7</version>
+        </dependency>
 
         <!-- jwt -->
         <dependency>
@@ -28,4 +45,5 @@
         </dependency>
 
     </dependencies>
+
 </project>

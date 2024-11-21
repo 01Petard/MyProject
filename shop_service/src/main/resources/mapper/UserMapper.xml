@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzx.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.hzx.model.entity.User">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="username" column="username" jdbcType="VARCHAR"/>
+            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="email" column="email" jdbcType="VARCHAR"/>
+            <result property="phone" column="phone" jdbcType="CHAR"/>
+            <result property="createtime" column="createtime" jdbcType="TIMESTAMP"/>
+            <result property="updatetime" column="updatetime" jdbcType="TIMESTAMP"/>
+            <result property="version" column="version" jdbcType="INTEGER"/>
+            <result property="deleted" column="deleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="pageQuery" resultType="com.hzx.model.entity.User">
+        select * from user
+        <where>
+            <if test="username != null and username != ''">
+                and username like concat('%',#{username},'%')
+                and phone like concat('%',#{phone},'%')
+                and email like concat('%',#{email},'%')
+            </if>
+        </where>
+        order by createtime desc
+    </select>
+</mapper>

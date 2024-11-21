@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手机号验证及自动注册/登录</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<h2>手机号验证及自动注册/登录</h2>
+<hr>
+<input type="text" id="phone" placeholder="手机号" value="13248684099">
+<input type="text" id="code" placeholder="验证码" value="123456">
+<button onclick="sendCode()" id="sendCodeBtn">发送验证码</button>
+<button onclick="verifyCode()">自动注册/登录</button>
+
+<hr>
+<div>
+    <h3>解析响应结果</h3>
+    <div id="response"></div>
+</div>
+<hr>
+<div>
+    <h3>发送token请求结果</h3>
+    <button onclick="sendRequest()" id="sendRequestBtn">发送请求</button>
+</div>
+<hr>
+<div>
+    <h3>本地缓存中的Token</h3>
+    <div id="localToken"></div>
+    <button onclick="cleanCache()" id="cleanCacheBtn">清除缓存</button>
+</div>
+<hr>
+<div>
+    <h3>查询服务端是否运行</h3>
+    <button onclick="isServerOnline()" id="isServerOnlineBtn">查询服务端运行情况</button>
+</div>
+
+
+<script>
+    $(document).ready(function() {
+        // 读取本地缓存中的authentication字段的值并显示在标签上
+        const localToken = localStorage.getItem('authentication');
+        if (localToken) {
+            $('#localToken').text(localToken);
+            // 发送请求时，判断token是否过期
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8008/user/login',
+                data: { 'authentication': localToken },
+                success: function(response) {
+                    $('#response').text(JSON.stringify(response, null, 2));
+                },
+                error: function() {
+                    $('#response').text('请求失败');
+                }
+            });
+        } else {
+            $('#localToken').text('未登录');
+        }
+    });
+
+    // 发送验证码
+    function sendCode() {
+        const phone = $('#phone').val();
+        if (!phone) {
+            alert('请输入手机号');
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: `http://localhost:8008/user/auth/sendCode/${phone}`,
+            success: function(response) {
+                if (response.code === 1) {
+                    alert(response.data);
+                    $('#sendCodeBtn').prop('disabled', true);
+                    let cooldown = 60;
+                    const interval = setInterval(function() {
+                        $('#sendCodeBtn').text(`重新发送 (${cooldown}s)`);
+                        cooldown--;
+                        if (cooldown < 0) {
+                            clearInterval(interval);
+                            $('#sendCodeBtn').text('发送验证码');
+                            $('#sendCodeBtn').prop('disabled', false);
+                        }
+                    }, 1000);
+                } else {
+                    alert('发送失败，重试中...');
+                    setTimeout(sendCode, 1000);
+                }
+            },
+            error: function(xhr, status, error) {
+                $('#response').text(`Error: ${error}`);
+            }
+        });
+    }
+
+    // 自动注册/登录
+    function verifyCode() {
+        const phone = $('#phone').val();
+        const code = $('#code').val();
+        if (!phone || !code) {
+            alert('请输入手机号和验证码');
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: `http://localhost:8008/user/auth/verifyCode/${phone}/${code}`,
+            success: function(response) {
+                if (response.code === 1) {
+                    const token = response.data.token;
+                    $('#localToken').text(`${token}`);
+                    localStorage.setItem('authentication', token);
+                } else {
+                    alert('验证码错误');
+                }
+            },
+            error: function(xhr, status, error) {
+                $('#response').text(`Error: ${error}`);
+            }
+        });
+    }
+
+
+    // 删除本地缓存中的authentication字段
+    function cleanCache() {
+        localStorage.removeItem('authentication');
+        $('#localToken').text('');
+    }
+
+
+    // 3. 点击按钮时携带authentication字段的token发送POST请求，并将结果打印在标签上
+    function sendRequest() {
+        const token = localStorage.getItem('authentication');
+        if (!token) {
+            alert('未找到token，请先进行登录');
+            return;
+        }
+
+        // 使用jQuery的post方法发送POST请求
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8008/hello',
+            headers: { 'authentication': token },
+            success: function(response) {
+                $('#response').text(JSON.stringify(response, null, 2));
+            },
+            error: function(xhr, status, error) {
+                $('#response').text(`Error: ${error}`);
+            }
+        });
+    }
+
+    function isServerOnline() {
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:8008/ping',
+            success: function(response) {
+                $('#response').text(JSON.stringify(response, null, 2));
+                alert(response.data);
+            },
+            error: function(xhr, status, error) {
+                $('#response').text(`Error: ${error}`);
+                alert('无法连接到服务器');
+            }
+        });
+    }
+
+
+</script>
+</body>
+</html>
